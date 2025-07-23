@@ -20,24 +20,10 @@ def get_models():
         "ANN": MLPClassifier()
     }
 
-
-# Wrapper class to hold model and name
-class ModelWrapper:
-    def __init__(self, name, library, function, attributes=None):
-        if attributes is None:
-            attributes = {}
-
-        # Dynamically import the module
-        module_path = f"sklearn.{library}"
-        sklearn_module = importlib.import_module(module_path)
-
-        # Get the model class
-        model_class = getattr(sklearn_module, function)
-
-        self.name = name
-        self.model = model_class(**attributes)
-
-
-# Main model module function
-def model_module(name, library, function, attributes=None):
-    return ModelWrapper(name, library, function, attributes)
+def model_module(library, function, attributes=None):
+    if attributes is None:
+        attributes = {}
+    module_path = f"sklearn.{library}"
+    sklearn_module = importlib.import_module(module_path)
+    model_class = getattr(sklearn_module, function)
+    return model_class(**attributes)  # ⬅️ مستقیماً مدل رو برمی‌گردونیم
